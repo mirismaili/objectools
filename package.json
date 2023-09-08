@@ -1,28 +1,47 @@
 {
-  "name": "objecter",
-  "version": "1.0.2",
-  "description": "",
-  "keywords": [],
+  "name": "objectools",
+  "version": "1.0.4",
+  "description": "Useful easy-to-use utilities to for javascript objects",
+  "keywords": [
+    "object-utilitis",
+    "map-object",
+    "filter-object",
+    "forEach-object",
+    "find-object",
+    "sort-object",
+    "some-object",
+    "every-object",
+    "transpose-object",
+    "flip-object",
+    "mirror-object"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mirismaili/objecter"
+    "url": "https://github.com/mirismaili/objectools"
   },
   "license": "MIT",
   "author": "S. Mahdi Mir-Ismaili <s.m.mirismaili@gmail.com>",
   "type": "module",
-  "main": "src/main.js",
+  "main": "dist/main.js",
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
+    "prettier.format": "prettier --write .",
+    "build": "tsc",
+    "prepublishOnly": "npm run prettier.format & npm run build",
     "patch-version": "npm version patch --no-git-tag-version",
     "increase-minor-version": "npm version minor --no-git-tag-version",
     "increase-major-version": "npm version major --no-git-tag-version",
     "tag-this-version": "node -e \"require('child_process').execSync('git tag v' + require('./package.json').version)\""
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "prettier": "^3.0.3",
+    "@types/node": "^20.5.9",
+    "typescript": "^5.2.2"
+  },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   }
 }
