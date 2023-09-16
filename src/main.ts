@@ -3,7 +3,7 @@
  * @author {@link https://mirismaili.github.io S. Mahdi Mir-Ismaili}
  */
 
-export class O<V, K extends keyof any> {
+export class O<K extends Key, V> {
   entries: [K, V][]
 
   constructor(object: {[P in K]: V}) {
@@ -14,43 +14,40 @@ export class O<V, K extends keyof any> {
   get o() {
     return Object.fromEntries(this.entries) as {[P in K]: V}
   }
-
   get keys() {
     return new Set(this.entries.map(([key]) => key))
   }
-
   get values() {
     return this.entries.map(([, value]) => value)
   }
-
   get length() {
     return this.entries.length
   }
 
-  static oFromKeys<V, K extends string = string>(keys: K[], value: V | ((key: K, index: number) => V)) {
-    const instance = Object.create(this.prototype) as O<V, K>
+  static oFromKeys<K extends Key, V>(keys: K[], value: V | ((key: K, index: number) => V)) {
+    const instance = Object.create(this.prototype) as O<K, V>
     instance.entries =
       typeof value === 'function'
-        ? keys.map((key, index) => [key, (value as (key: string, index: number) => V)(key, index)])
+        ? keys.map((key, index) => [key, (value as (key: K, index: number) => V)(key, index)])
         : keys.map((key) => [key, value])
     return instance
   }
 
-  static fromKeys<V, K extends string = string>(keys: K[], value: V | ((key: K, index: number) => V)) {
+  static fromKeys<V, K extends Key = string>(keys: K[], value: V | ((key: K, index: number) => V)) {
     return this.oFromKeys(keys, value).o
   }
 
-  oFilter<U extends V, P extends K>(predicateFn: (value: V, key: K, index: number) => this is O<U, P>) {
+  oFilter<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     this.entries = this.entries.filter(([k, v], i) => predicateFn(v, k, i))
-    return this as unknown as O<U, P>
+    return this as unknown as O<P, U>
   }
 
-  filter<U extends V, P extends K>(predicateFn: (value: V, key: K, index: number) => this is O<U, P>) {
-    return this.oFilter<U, P>(predicateFn).o
+  filter<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
+    return this.oFilter<P, U>(predicateFn).o
   }
 
-  oMap<U, P extends keyof any>(mapper: (value: V, key: K, index: number) => U | [P, U]) {
-    if (!this.entries.length) return this as unknown as O<U, P>
+  oMap<P extends Key = K, U = V>(mapper: (value: V, key: K, index: number) => U | [P, U]) {
+    if (!this.entries.length) return this as unknown as O<P, U>
 
     const [firstKey, firstValue] = this.entries[0]
     const testReturnType = mapper(firstValue, firstKey, 0)
@@ -63,11 +60,11 @@ export class O<V, K extends keyof any> {
         ? this.entries.map(([k, v], i) => mapper(v, k, i))
         : this.entries.map(([k, v], i) => [k, mapper(v, k, i)])
 
-    return this as unknown as O<U, P>
+    return this as unknown as O<P, U>
   }
 
-  map<U, P extends keyof any>(mapper: (value: V, key: K, index: number) => U | [P, U]) {
-    return this.oMap<U, P>(mapper).o
+  map<P extends Key = K, U = V>(mapper: (value: V, key: K, index: number) => U | [P, U]) {
+    return this.oMap<P, U>(mapper).o
   }
 
   forEach(callback: (value: V, key: K, index: number) => void) {
@@ -79,7 +76,6 @@ export class O<V, K extends keyof any> {
   some(predicateFn: (value: V, key: K, index: number) => unknown): boolean {
     return this.entries.some(([k, v], i) => predicateFn(v, k, i))
   }
-
   every(predicateFn: (value: V, key: K, index: number) => unknown): boolean {
     return this.entries.every(([k, v], i) => predicateFn(v, k, i))
   }
@@ -87,40 +83,63 @@ export class O<V, K extends keyof any> {
   indexOf(value: V) {
     return this.entries.findIndex(([_, v]) => v === value)
   }
-
   indexOfKey(key: K) {
     return this.entries.findIndex(([k]) => k === key)
   }
-
   lastIndexOf(value: V) {
     return this.entries.findLastIndex(([_, v]) => v === value)
   }
 
-  findIndex<U extends V, P extends K>(predicateFn: (value: V, key: K, index: number) => this is O<U, P>) {
-    return this.entries.findIndex(([k, v], i) => predicateFn(v, k, i))
-  }
-
-  findLastIndex<U extends V, P extends K>(predicateFn: (value: V, key: K, index: number) => this is O<U, P>) {
-    return this.entries.findLastIndex(([k, v], i) => predicateFn(v, k, i))
-  }
-
-  find<U extends V, P extends K>(predicateFn: (value: V, key: K, index: number) => this is O<U, P>) {
+  find<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     const found = this.entries.find(([k, v], i) => predicateFn(v, k, i))
     return found && ([found[0] as P, found[1] as U] as const)
   }
 
-  findLast<U extends V, P extends K>(predicateFn: (value: V, key: K, index: number) => this is O<U, P>) {
+  findIndex<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
+    return this.entries.findIndex(([k, v], i) => predicateFn(v, k, i))
+  }
+
+  findKey<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
+    return this.entries.find(([k, v], i) => predicateFn(v, k, i))?.[0]
+  }
+
+  findValue<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
+    return this.entries.find(([k, v], i) => predicateFn(v, k, i))?.[1]
+  }
+
+  findLast<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     const found = this.entries.findLast(([k, v], i) => predicateFn(v, k, i))
     return found && ([found[0] as P, found[1] as U] as const)
   }
 
-  oSort(compareFn: (a: [K, V], b: [K, V]) => number = sortByKeys) {
+  findLastIndex<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
+    return this.entries.findLastIndex(([k, v], i) => predicateFn(v, k, i))
+  }
+
+  findLastKey<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
+    return this.entries.findLast(([k, v], i) => predicateFn(v, k, i))?.[0]
+  }
+
+  findLastValue<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
+    return this.entries.findLast(([k, v], i) => predicateFn(v, k, i))?.[1]
+  }
+
+  oSort(compareFn: (a: [K, V], b: [K, V]) => number = ([key1], [key2]) => (String(key1) < String(key2) ? -1 : 1)) {
     this.entries.sort(compareFn)
     return this
   }
 
-  sort(compareFn: (a: [K, V], b: [K, V]) => number = sortByKeys) {
+  sort(compareFn?: (a: [K, V], b: [K, V]) => number) {
     return this.oSort(compareFn).o
+  }
+
+  oSortByValues(compareFn: (v1: V, v2: V) => number = (v1, v2) => (v1 < v2 ? -1 : 1)) {
+    this.entries.sort(([_, v1], [__, v2]) => compareFn(v1, v2))
+    return this
+  }
+
+  sortByValues(compareFn?: (v1: V, v2: V) => number) {
+    return this.oSortByValues(compareFn).o
   }
 
   shallowEqual(object: Record<K, any>) {
@@ -176,7 +195,7 @@ export class O<V, K extends keyof any> {
         ]),
       ),
     ])
-    return this as unknown as O<Record<K, any>, V extends object ? keyof V : never>
+    return this as unknown as O<V extends object ? (keyof V extends Key ? keyof V : never) : never, Record<K, any>>
   }
 
   /**
@@ -207,8 +226,7 @@ export class O<V, K extends keyof any> {
  * // Access `length`:
  * const length = o(myObject).length // => a `number`
  */
-const o = <V, K extends string>(object: {[P in K]: V}) => object && new O(object)
-// noinspection JSUnusedGlobalSymbols
+const o = <K extends Key, V>(object: {[P in K]: V}) => object && new O<K, V>(object)
 export default o
 
-const sortByKeys = <K extends keyof any>([key1]: [K, any], [key2]: [K, any]) => (String(key1) < String(key2) ? -1 : 1)
+type Key = string // `keyof any` has some inconvenience

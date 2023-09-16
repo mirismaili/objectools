@@ -9,11 +9,30 @@
 [![Forks](https://img.shields.io/github/forks/mirismaili/objectools.svg?style=social)](https://github.com/mirismaili/objectools/fork)
 [![Stars](https://img.shields.io/github/stars/mirismaili/objectools.svg?style=social)](https://github.com/mirismaili/objectools)
 
+## Table of contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+  - [`.filter()`](#filter)
+  - [`.map()`](#map)
+  - [`.keys`, `.values`, `.entries`, `.length`](#keys-values-entries-length)
+  - [`.find(), .findIndex(), .findKey(), .findValue()`](#find-findindex-findkey-findvalue)
+  - [`.findLast(), .findLastIndex(), .findLastKey(), .findLastValue()`](#findlast-findlastindex-findlastkey-findlastvalue)
+  - [`.indexOf()`, `.lastIndexOf()`, `.indexOfKey()`](#indexof-lastindexof-indexofkey)
+  - [`.some()`, `.every()`](#some-every)
+  - [`.sort()`, `.sortByValues()`](#sort-sortbyvalues)
+  - [`.flip()`](#flip)
+  - [Chain mehods](#chain-mehods)
+  - [`.transpose()`](#transpose)
+- [Usage with Jest](#usage-with-jest)
+
 ## Features
 
 - **Easy to use**, w/o
   modifying [object prototype](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes) (`o(obj).filter(...)`)
-- Useful methods that are operable on **keys**, **values** and **indices** (see [Example usages](#example-usages)):
+- Useful methods that are operable on **keys**, **values** and **indices** (see [Examples](#examples)):
   - `filter()`
   - `map()`, `forEach()`
   - `find()`, `findIndex()`, `findLast()`, `findLastIndex()`
@@ -24,7 +43,7 @@
 - and properties:
   - `.length`
   - `.keys`, `.values`, `.entries`
-- Provide an easy way to **chain methods** (see [Example usages](#example-usages))
+- Provide an easy way to [**chain methods**](#chain-mehods)
 - **Typed keys and values**
 - **No dependency**, based on modern JS features
 - Memory and processor efficient
@@ -45,53 +64,126 @@ or:
 yarn add objectools
 ```
 
-## Example usages:
+## Usage
 
 ```ts
 import o from 'objectools'
 
-const obj = {a: 1, b: 2, c: 3}
+o({a: 1, b: 2, c: 3}).filter | map |
+...
+(
+...)
+```
 
-o(obj).filter((value) => value > 1) // {b: 2, c: 3}
-o(obj).filter((_, key, index) => key < 'c' && index > 0) // {b: 2}
+## Examples
 
-o(obj).map((value) => value * 2) // {a: 2, b: 4, c: 6}
-o(obj).map((value, key) => [key.toUpperCase(), value - 1]) // {A: 0, B: 1, C: 2}
+### `.filter()`
 
-o(obj).keys // Set {'a', 'b', 'c'} // Type: `Set<'a' | 'b' | 'c'>`
-o(obj).values // [1, 2, 3] // Type: `number[]`
-o(obj).entries // [['a', 1], ['b', 2], ['c', 3]] // Type: ['a' | 'b' | 'c', number][]
-o(obj).length // 3
+```ts
+o({a: 1, b: 2, c: 3}).filter((value) => value > 1) // {b: 2, c: 3}
+o({a: 1, b: 2, c: 3}).filter((_, key, index) => key < 'c' && index > 0) // {b: 2}
+```
 
-o(obj).find((value) => value > 1) // ['b', 2]
-o(obj).findIndex((value) => value > 1) // 1
-o(obj).findLast((value) => value > 1) // ['c', 3]
-o(obj).findLastIndex((value) => value > 1) // 2
+### `.map()`
 
+```ts
+o({a: 1, b: 2, c: 3}).map((value) => value * 2) // {a: 2, b: 4, c: 6}
+o({a: 1, b: 2, c: 3}).map((value, key) => [key.toUpperCase(), value - 1]) // {A: 0, B: 1, C: 2}
+```
+
+### `.keys`, `.values`, `.entries`, `.length`
+
+```ts
+o({a: 1, b: 2, c: 3}).keys // Set {'a', 'b', 'c'} // Type: `Set<'a' | 'b' | 'c'>`
+o({a: 1, b: 2, c: 3}).values // [1, 2, 3] // Type: `number[]`
+o({a: 1, b: 2, c: 3}).entries // [['a', 1], ['b', 2], ['c', 3]] // Type: ['a' | 'b' | 'c', number][]
+o({a: 1, b: 2, c: 3}).length // 3
+```
+
+### `.find(), .findIndex(), .findKey(), .findValue()`
+
+```ts
+o({a: 1, b: 2, c: 3}).find((value) => value > 1) // ['b', 2]
+o({a: 1, b: 2, c: 3}).findIndex((value) => value > 1) // 1
+o({a: 1, b: 2, c: 3}).findKey((value) => value > 1) // 'b'
+o({a: 1, b: 2, c: 3}).findValue((value) => value > 1) // 2
+```
+
+### `.findLast(), .findLastIndex(), .findLastKey(), .findLastValue()`
+
+```ts
+o({a: 1, b: 2, c: 3}).findLast((value) => value > 1) // ['c', 3]
+o({a: 1, b: 2, c: 3}).findLastIndex((value) => value > 1) // 2
+o({a: 1, b: 2, c: 3}).findLastKey((value) => value > 1) // 'c'
+o({a: 1, b: 2, c: 3}).findLastValue((value) => value > 1) // 3
+```
+
+### `.indexOf()`, `.lastIndexOf()`, `.indexOfKey()`
+
+```ts
 o({a: 3, b: 3}).indexOf(3) // 0
 o({a: 3, b: 3}).lastIndexOf(3) // 1
 o({a: 3, b: 3}).indexOfKey('b') // 1
+```
 
-o(obj).some((value) => value > 1) // true
-o(obj).every((value) => value > 1) // false
+### `.some()`, `.every()`
 
+```ts
+o({a: 1, b: 2, c: 3}).some((value) => value > 1) // true
+o({a: 1, b: 2, c: 3}).every((value) => value > 1) // false
+```
+
+### `.sort()`, `.sortByValues()`
+
+```ts
+o({b: 1, a: 3, c: 2}).sort() // {a: 3, b: 1, c: 2}
+o({b: 1, a: 3, c: 2}).sortByValues() // {b: 1, c: 2, a: 3}
+```
+
+### `.flip()`
+
+```ts
 o({a: 'x', b: 'y'}).flip() // {x: 'a', y: 'b'}
+```
 
-// Chain methods:
+### Chain mehods
+
+```ts
 o({b: 1, a: 2, c: 3})
   .oFilter((value) => value < 3)
   .oMap((value) => value * 2)
   .sort()
 // --> {a: 4, b: 2}
+```
 
+### `.transpose()`
+
+```ts
 o({
   x: {a: 1, b: 2},
   y: {a: 3, b: 4},
   z: {a: 5, b: 6},
 }).transpose()
-// Returns:
+// -->
 // {
 //   a: {x: 1, y: 3, z: 5},
 //   b: {x: 2, y: 4, z: 6},
 // }
 ```
+
+## Usage with [Jest](https://jestjs.io/)
+
+You may need to add this to your [_"jest.config.js"_](https://jestjs.io/docs/configuration) file:
+
+```js
+export default {
+  transformIgnorePatterns: [
+    // These packages are created based on modern javascript and use ESM module system (import/export). But Jest use
+    // old common-js module-system. So we need to transform these files using babel, too (like source files). Note that
+    // "node_modules" folder is ignored by default, and we've EXCLUDED these packages from this general rule (see `?!`
+    // in the below regex).
+    '/node_modules/(?!(objectools)/)',
+}
+```
+
+<sup>_See: https://stackoverflow.com/a/49676319/5318303/#jest-gives-an-error-syntaxerror-unexpected-token-export_ </sup>
