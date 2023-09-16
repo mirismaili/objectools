@@ -37,8 +37,9 @@
     "dist"
   ],
   "scripts": {
+    "test": "bun test",
     "prettier.format": "prettier --write .",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "prepublishOnly": "npm run prettier.format & npm run build",
     "patch-version": "npm version patch --no-git-tag-version",
     "increase-minor-version": "npm version minor --no-git-tag-version",
