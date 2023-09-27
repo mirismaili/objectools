@@ -1,6 +1,6 @@
 # ObjecTools
 
-> Useful easy-to-use utilities to for javascript objects
+> Useful easy-to-use utilities for JavaScript objects
 
 [![npm (scoped)](https://img.shields.io/npm/v/objectools.svg)](https://npmjs.com/package/objectools)
 [![install size](https://packagephobia.now.sh/badge?p=objectools)](https://packagephobia.now.sh/result?p=objectools)
@@ -24,7 +24,7 @@
   - [`.some()`, `.every()`](#some-every)
   - [`.sort()`, `.sortByValues()`](#sort-sortbyvalues)
   - [`.flip()`](#flip)
-  - [Chain mehods](#chain-mehods)
+  - [Chain methods](#chain-methods)
   - [`.transpose()`](#transpose)
 - [Usage with Jest](#usage-with-jest)
 
@@ -43,7 +43,7 @@
 - and properties:
   - `.length`
   - `.keys`, `.values`, `.entries`
-- Provide an easy way to [**chain methods**](#chain-mehods)
+- Provides an easy way to **[chain methods](#chain-methods)**
 - **Typed keys and values**
 - **No dependency**, based on modern JS features
 - Memory and processor efficient
@@ -146,7 +146,7 @@ o({b: 1, a: 3, c: 2}).sortByValues() // {b: 1, c: 2, a: 3}
 o({a: 'x', b: 'y'}).flip() // {x: 'a', y: 'b'}
 ```
 
-### Chain mehods
+### Chain methods
 
 ```ts
 o({b: 1, a: 2, c: 3})

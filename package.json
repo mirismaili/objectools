@@ -1,7 +1,7 @@
 {
   "name": "objectools",
-  "version": "2.0.1",
-  "description": "Useful easy-to-use utilities to for javascript objects",
+  "version": "2.0.2",
+  "description": "Useful easy-to-use utilities for JavaScript objects",
   "keywords": [
     "object-utilitis",
     "map-object",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "prettier": "^3.0.3",
     "@types/node": "^20.5.9",
-    "typescript": "^5.2.2"
+    "typescript": "~5.2.2"
   },
   "engines": {
     "node": ">=18"
