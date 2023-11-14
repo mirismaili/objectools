@@ -37,15 +37,27 @@ export class O<K extends Key, V> {
     return this.oFromKeys(keys, value).o
   }
 
+  /**
+   * Filter the object by keys and values (chainable).
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+   */
   oFilter<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     this.entries = this.entries.filter(([k, v], i) => predicateFn(v, k, i))
     return this as unknown as O<P, U>
   }
 
+  /**
+   * Filter the object by keys and values.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+   */
   filter<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     return this.oFilter<P, U>(predicateFn).o
   }
 
+  /**
+   * Map the object by keys and values (chainable).
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+   */
   oMap<P extends Key = K, U = V>(mapper: (value: V, key: K, index: number) => U | [P, U]) {
     if (!this.entries.length) return this as unknown as O<P, U>
 
@@ -63,81 +75,147 @@ export class O<K extends Key, V> {
     return this as unknown as O<P, U>
   }
 
+  /**
+   * Map the object by keys and values.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+   */
   map<P extends Key = K, U = V>(mapper: (value: V, key: K, index: number) => U | [P, U]) {
     return this.oMap<P, U>(mapper).o
   }
 
+  /**
+   * `forEach`-loop method for objects.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+   */
   forEach(callback: (value: V, key: K, index: number) => void) {
     this.entries.forEach(([k, v], i) => {
       callback(v, k, i)
     })
   }
 
+  /**
+   * `some` method for objects.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
+   */
   some(predicateFn: (value: V, key: K, index: number) => unknown): boolean {
     return this.entries.some(([k, v], i) => predicateFn(v, k, i))
   }
+  /**
+   * `every` method for objects.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+   */
   every(predicateFn: (value: V, key: K, index: number) => unknown): boolean {
     return this.entries.every(([k, v], i) => predicateFn(v, k, i))
   }
 
+  /**
+   * `indexOf` method for objects.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
+   */
   indexOf(value: V) {
     return this.entries.findIndex(([_, v]) => v === value)
   }
   indexOfKey(key: K) {
     return this.entries.findIndex(([k]) => k === key)
   }
+  /**
+   * `lastIndexOf` method for objects.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
+   */
   lastIndexOf(value: V) {
     return this.entries.findLastIndex(([_, v]) => v === value)
   }
 
+  /**
+   * Find matched entry (`[key, value]`) in the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+   */
   find<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     const found = this.entries.find(([k, v], i) => predicateFn(v, k, i))
     return found && ([found[0] as P, found[1] as U] as const)
   }
-
+  /**
+   * Find matched index in the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+   */
   findIndex<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     return this.entries.findIndex(([k, v], i) => predicateFn(v, k, i))
   }
-
+  /**
+   * Find matched index in the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+   */
   findKey<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     return this.entries.find(([k, v], i) => predicateFn(v, k, i))?.[0]
   }
-
+  /**
+   * Similar to `find()` method. But returns only the `value` (instead of `[key, value]`).
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+   */
   findValue<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     return this.entries.find(([k, v], i) => predicateFn(v, k, i))?.[1]
   }
 
+  /**
+   * Find the last matched entry (`[key, value]`) in the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findLast
+   */
   findLast<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     const found = this.entries.findLast(([k, v], i) => predicateFn(v, k, i))
     return found && ([found[0] as P, found[1] as U] as const)
   }
-
+  /**
+   * Find the last matched index in the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findLastIndex
+   */
   findLastIndex<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     return this.entries.findLastIndex(([k, v], i) => predicateFn(v, k, i))
   }
-
+  /**
+   * Find the last matched key in the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findLastIndex
+   */
   findLastKey<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     return this.entries.findLast(([k, v], i) => predicateFn(v, k, i))?.[0]
   }
-
+  /**
+   * Similar to `findLast()` method. But returns only the `value` (instead of `[key, value]`).
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findLast
+   */
   findLastValue<P extends K, U extends V>(predicateFn: (value: V, key: K, index: number) => this is O<P, U>) {
     return this.entries.findLast(([k, v], i) => predicateFn(v, k, i))?.[1]
   }
 
+  /**
+   * NOT [IN-PLACE](https://en.wikipedia.org/wiki/In-place_algorithm) sort the object by keys and values (and return a
+   * NEW object) (chainable).
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted
+   */
   oSort(compareFn: (a: [K, V], b: [K, V]) => number = ([key1], [key2]) => (String(key1) < String(key2) ? -1 : 1)) {
     this.entries.sort(compareFn)
     return this
   }
-
+  /**
+   * NOT [IN-PLACE](https://en.wikipedia.org/wiki/In-place_algorithm) sort the object by keys and values (and return a
+   * NEW object).
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted
+   */
   sort(compareFn?: (a: [K, V], b: [K, V]) => number) {
     return this.oSort(compareFn).o
   }
 
+  /**
+   * Similar to `oSort()` method. But operates based on the `value`s only (instead of `[key, value]`s).
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted
+   */
   oSortByValues(compareFn: (v1: V, v2: V) => number = (v1, v2) => (v1 < v2 ? -1 : 1)) {
     this.entries.sort(([_, v1], [__, v2]) => compareFn(v1, v2))
     return this
   }
-
+  /**
+   * Similar to `sort()` method. But operates based on the `value`s only (instead of `[key, value]`s).
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted
+   */
   sortByValues(compareFn?: (v1: V, v2: V) => number) {
     return this.oSortByValues(compareFn).o
   }
@@ -150,12 +228,12 @@ export class O<K extends Key, V> {
   /**
    * Swap (mirror) key-value pairs.
    * @example
-   * {a: 'b', c: 'd'} --> {b: 'a', d: 'c'}
+   * {a: 'x', b: 'y'} --> {x: 'a', y: 'b'}
    */
   oFlip() {
     // @ts-expect-error
     this.entries = this.entries.map(([k, v]) => [v, k])
-    return this as unknown as O<K, V extends string ? V : never>
+    return this as unknown as O<V extends string ? V : never, K>
   }
 
   /**
@@ -165,6 +243,27 @@ export class O<K extends Key, V> {
    */
   flip() {
     return this.oFlip().o
+  }
+
+  /**
+   * NOT [IN-PLACE](https://en.wikipedia.org/wiki/In-place_algorithm) reverse the object (and return a NEW object)
+   * (chainable).
+   * @example
+   * {a: 'x', b: 'y'} --> {b: 'y', a: 'x'}
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toReversed
+   */
+  oReverse() {
+    this.entries.reverse()
+    return this
+  }
+  /**
+   * NOT [IN-PLACE](https://en.wikipedia.org/wiki/In-place_algorithm) reverse the object (and return a NEW object).
+   * @example
+   * {a: 'b', c: 'd'} --> {b: 'y', a: 'x'}
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toReversed
+   */
+  reverse() {
+    return this.oReverse().o
   }
 
   /**

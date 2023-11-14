@@ -18,12 +18,13 @@
   - [`.filter()`](#filter)
   - [`.map()`](#map)
   - [`.keys`, `.values`, `.entries`, `.length`](#keys-values-entries-length)
-  - [`.find(), .findIndex(), .findKey(), .findValue()`](#find-findindex-findkey-findvalue)
-  - [`.findLast(), .findLastIndex(), .findLastKey(), .findLastValue()`](#findlast-findlastindex-findlastkey-findlastvalue)
+  - [`.find()`, `.findIndex()`, `.findKey()`, `.findValue()`](#find-findindex-findkey-findvalue)
+  - [`.findLast()`, `.findLastIndex()`, `.findLastKey()`, `.findLastValue()`](#findlast-findlastindex-findlastkey-findlastvalue)
   - [`.indexOf()`, `.lastIndexOf()`, `.indexOfKey()`](#indexof-lastindexof-indexofkey)
   - [`.some()`, `.every()`](#some-every)
   - [`.sort()`, `.sortByValues()`](#sort-sortbyvalues)
   - [`.flip()`](#flip)
+  - [`.reverse()`](#reverse)
   - [Chain methods](#chain-methods)
   - [`.transpose()`](#transpose)
 - [Usage with Jest](#usage-with-jest)
@@ -37,8 +38,8 @@
   - `map()`, `forEach()`
   - `find()`, `findIndex()`, `findLast()`, `findLastIndex()`
   - `indexOf()`, `lastIndexOf()`, `indexOfKey()`
+  - `sort()`, `reverse()`
   - `some()`, `every()`
-  - `sort()`
   - `flip()`, `transpose()`
 - and properties:
   - `.length`
@@ -69,22 +70,26 @@ yarn add objectools
 ```ts
 import o from 'objectools'
 
-o({a: 1, b: 2, c: 3}).filter | map |
-...
-(
-...)
+o({a: 1, b: 2, c: 3}).filter(/*...*/)
+o({a: 1, b: 2, c: 3}).map(/*...*/)
+o({a: 1, c: 3, b: 2}).sort()
+o({...}) //...
+
+// Or chain methods:
+o({...}).oFilter(/*...*/).oMap(/*...*/).sort() // Don't prefix the last one with `o`.
+// I.e. don't write `.oSort()` if you don't want to countinue the chain.
 ```
 
 ## Examples
 
-### `.filter()`
+### [`.filter()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
 
 ```ts
 o({a: 1, b: 2, c: 3}).filter((value) => value > 1) // {b: 2, c: 3}
 o({a: 1, b: 2, c: 3}).filter((_, key, index) => key < 'c' && index > 0) // {b: 2}
 ```
 
-### `.map()`
+### [`.map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
 
 ```ts
 o({a: 1, b: 2, c: 3}).map((value) => value * 2) // {a: 2, b: 4, c: 6}
@@ -100,7 +105,7 @@ o({a: 1, b: 2, c: 3}).entries // [['a', 1], ['b', 2], ['c', 3]] // Type: ['a' | 
 o({a: 1, b: 2, c: 3}).length // 3
 ```
 
-### `.find(), .findIndex(), .findKey(), .findValue()`
+### [`.find()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find), [`.findIndex()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex), `.findKey()`, `.findValue()`
 
 ```ts
 o({a: 1, b: 2, c: 3}).find((value) => value > 1) // ['b', 2]
@@ -109,7 +114,7 @@ o({a: 1, b: 2, c: 3}).findKey((value) => value > 1) // 'b'
 o({a: 1, b: 2, c: 3}).findValue((value) => value > 1) // 2
 ```
 
-### `.findLast(), .findLastIndex(), .findLastKey(), .findLastValue()`
+### [`.findLast()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findLast), [`.findLastIndex()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findLastIndex), `.findLastKey()`, `.findLastValue()`
 
 ```ts
 o({a: 1, b: 2, c: 3}).findLast((value) => value > 1) // ['c', 3]
@@ -118,7 +123,7 @@ o({a: 1, b: 2, c: 3}).findLastKey((value) => value > 1) // 'c'
 o({a: 1, b: 2, c: 3}).findLastValue((value) => value > 1) // 3
 ```
 
-### `.indexOf()`, `.lastIndexOf()`, `.indexOfKey()`
+### [`.indexOf()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf), [`.lastIndexOf()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf), `.indexOfKey()`
 
 ```ts
 o({a: 3, b: 3}).indexOf(3) // 0
@@ -126,14 +131,14 @@ o({a: 3, b: 3}).lastIndexOf(3) // 1
 o({a: 3, b: 3}).indexOfKey('b') // 1
 ```
 
-### `.some()`, `.every()`
+### [`.some()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some), [`.every()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
 
 ```ts
 o({a: 1, b: 2, c: 3}).some((value) => value > 1) // true
 o({a: 1, b: 2, c: 3}).every((value) => value > 1) // false
 ```
 
-### `.sort()`, `.sortByValues()`
+### [`.sort()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted), `.sortByValues()`
 
 ```ts
 o({b: 1, a: 3, c: 2}).sort() // {a: 3, b: 1, c: 2}
@@ -144,6 +149,12 @@ o({b: 1, a: 3, c: 2}).sortByValues() // {b: 1, c: 2, a: 3}
 
 ```ts
 o({a: 'x', b: 'y'}).flip() // {x: 'a', y: 'b'}
+```
+
+### [`.reverse()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse)
+
+```ts
+o({a: 'x', b: 'y'}).reverse() // {b: 'y', a: 'x'}
 ```
 
 ### Chain methods

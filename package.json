@@ -1,6 +1,6 @@
 {
   "name": "objectools",
-  "version": "2.0.2",
+  "version": "2.1.4",
   "description": "Useful easy-to-use utilities for JavaScript objects",
   "keywords": [
     "object-utilitis",
@@ -21,6 +21,7 @@
     "sortByValues-object",
     "some-object",
     "every-object",
+    "reverse-object",
     "transpose-object",
     "flip-object",
     "mirror-object"

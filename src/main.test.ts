@@ -59,6 +59,10 @@ test('.flip()', () => {
   expect(o({a: 'x', b: 'y'}).flip()).toEqual({x: 'a', y: 'b'})
 })
 
+test('.reverse()', () => {
+  expect(o({a: 'x', b: 'y'}).reverse()).toEqual({b: 'y', a: 'x'})
+})
+
 test('Chain methods', () => {
   expect(
     o({b: 1, a: 2, c: 3})
