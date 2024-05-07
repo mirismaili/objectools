@@ -6,7 +6,7 @@
 export class O<K extends Key, V> {
   entries: [K, V][]
 
-  constructor(object: {[P in K]: V}) {
+  constructor(object: {[P in K]?: V}) {
     // @ts-expect-error
     this.entries = Object.entries(object)
   }
@@ -325,7 +325,7 @@ export class O<K extends Key, V> {
  * // Access `length`:
  * const length = o(myObject).length // => a `number`
  */
-const o = <K extends Key, V>(object: {[P in K]: V}) => object && new O<K, V>(object)
+const o = <K extends Key, V>(object: {[P in K]?: V}) => new O<K, V>(object)
 export default o
 
 type Key = string // `keyof any` has some inconvenience
