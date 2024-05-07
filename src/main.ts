@@ -45,7 +45,6 @@ export class O<K extends Key, V> {
     this.entries = this.entries.filter(([k, v], i) => predicateFn(v, k, i))
     return this as unknown as O<P, U>
   }
-
   /**
    * Filter the object by keys and values.
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
@@ -74,7 +73,6 @@ export class O<K extends Key, V> {
 
     return this as unknown as O<P, U>
   }
-
   /**
    * Map the object by keys and values.
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
@@ -202,6 +200,23 @@ export class O<K extends Key, V> {
    */
   sort(compareFn?: (a: [K, V], b: [K, V]) => number) {
     return this.oSort(compareFn).o
+  }
+
+  /** Filter out given key(s) from the object. */
+  omit<P extends K>(...keys: P[]) {
+    const obj = this.o
+    const newKeys = new Set(Object.keys(this.o)) as Set<Exclude<K, P>>
+    for (const key of keys) newKeys.delete(key as unknown as Exclude<K, P>)
+    const newObj = {} as {[Key in Exclude<K, P>]: V}
+    for (const key of newKeys) newObj[key] = obj[key]
+    return newObj
+    // return this.oOmit<P>(...keys).o
+  }
+  /** Filter out given key(s) from the object. (chainable) */
+  oOmit<P extends K>(...keys: P[]) {
+    return o(this.omit<P>(...keys))
+    // this.entries = this.entries.filter(([k]) => !keys.includes(k as P))
+    // return this as unknown as O<Exclude<K, P>, V>
   }
 
   /**

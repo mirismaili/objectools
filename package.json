@@ -1,6 +1,6 @@
 {
   "name": "objectools",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Useful easy-to-use utilities for JavaScript objects",
   "keywords": [
     "object-utilitis",
@@ -21,6 +21,8 @@
     "sortByValues-object",
     "some-object",
     "every-object",
+    "omit-object-key",
+    "omit-object-keys",
     "reverse-object",
     "transpose-object",
     "flip-object",
@@ -49,6 +51,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "bun-types": "^1.1.7",
     "prettier": "^3.0.3",
     "@types/node": "^20.5.9",
     "typescript": "~5.2.2"

@@ -55,6 +55,11 @@ test('.sort(), .sortByValues()', () => {
   expect(o({b: 1, a: 3, c: 2}).sortByValues()).toEqual({b: 1, c: 2, a: 3})
 })
 
+test('.omit()', () => {
+  expect(o(obj).omit('b')).toEqual({a: 1, c: 3})
+  expect(o(obj).omit('c', 'a')).toEqual({b: 2})
+})
+
 test('.flip()', () => {
   expect(o({a: 'x', b: 'y'}).flip()).toEqual({x: 'a', y: 'b'})
 })

@@ -21,8 +21,9 @@
   - [`.find()`, `.findIndex()`, `.findKey()`, `.findValue()`](#find-findindex-findkey-findvalue)
   - [`.findLast()`, `.findLastIndex()`, `.findLastKey()`, `.findLastValue()`](#findlast-findlastindex-findlastkey-findlastvalue)
   - [`.indexOf()`, `.lastIndexOf()`, `.indexOfKey()`](#indexof-lastindexof-indexofkey)
-  - [`.some()`, `.every()`](#some-every)
   - [`.sort()`, `.sortByValues()`](#sort-sortbyvalues)
+  - [`.some()`, `.every()`](#some-every)
+  - [`.omit()`](#omit)
   - [`.flip()`](#flip)
   - [`.reverse()`](#reverse)
   - [Chain methods](#chain-methods)
@@ -34,13 +35,15 @@
 - **Easy to use**, w/o
   modifying [object prototype](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes) (`o(obj).filter(...)`)
 - Useful methods that are operable on **keys**, **values** and **indices** (see [Examples](#examples)):
-  - `filter()`
-  - `map()`, `forEach()`
-  - `find()`, `findIndex()`, `findLast()`, `findLastIndex()`
-  - `indexOf()`, `lastIndexOf()`, `indexOfKey()`
-  - `sort()`, `reverse()`
-  - `some()`, `every()`
-  - `flip()`, `transpose()`
+  - [`filter()`](#filter)
+  - [`map()`](#map), `forEach()`
+  - [`find()`](#find-findindex-findkey-findvalue), [`findIndex()`](#find-findindex-findkey-findvalue), [`findLast()`](#findlast-findlastindex-findlastkey-findlastvalue), [`findLastIndex()`](<(#findlast-findlastindex-findlastkey-findlastvalue)>)
+  - [`indexOf()`, `lastIndexOf()`, `indexOfKey()`](<(#indexof-lastindexof-indexofkey)>)
+  - [`sort()`](#sort-sortbyvalues),
+  - `reverse()`
+  - [`some()`](#some-every), [`every()`](#some-every)
+  - [`omit() // omit key(s)`](#omit)
+  - [`flip()`](#flip), [`transpose()`](#transpose)
 - and properties:
   - `.length`
   - `.keys`, `.values`, `.entries`
@@ -131,6 +134,13 @@ o({a: 3, b: 3}).lastIndexOf(3) // 1
 o({a: 3, b: 3}).indexOfKey('b') // 1
 ```
 
+### [`.sort()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted), `.sortByValues()`
+
+```ts
+o({b: 1, a: 3, c: 2}).sort() // {a: 3, b: 1, c: 2}
+o({b: 1, a: 3, c: 2}).sortByValues() // {b: 1, c: 2, a: 3}
+```
+
 ### [`.some()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some), [`.every()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
 
 ```ts
@@ -138,11 +148,11 @@ o({a: 1, b: 2, c: 3}).some((value) => value > 1) // true
 o({a: 1, b: 2, c: 3}).every((value) => value > 1) // false
 ```
 
-### [`.sort()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted), `.sortByValues()`
+### `.omit()`
 
 ```ts
-o({b: 1, a: 3, c: 2}).sort() // {a: 3, b: 1, c: 2}
-o({b: 1, a: 3, c: 2}).sortByValues() // {b: 1, c: 2, a: 3}
+o({a: 1, b: 2, c: 3}).omit('b') // {a: 1, c: 3}
+o({a: 1, b: 2, c: 3}).omit('c', 'a') // {b: 2}
 ```
 
 ### `.flip()`
