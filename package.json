@@ -1,6 +1,6 @@
 {
   "name": "objectools",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Useful easy-to-use utilities for JavaScript objects",
   "keywords": [
     "object-utilitis",
@@ -42,7 +42,7 @@
   "scripts": {
     "test": "bun test",
     "prettier.format": "prettier --write .",
-    "build": "tsc --project tsconfig.build.json",
+    "build": "rm -rf dist tsconfig.tsbuildinfo && tsc --project tsconfig.build.json",
     "prepublishOnly": "npm run prettier.format & npm run build",
     "patch-version": "npm version patch --no-git-tag-version",
     "increase-minor-version": "npm version minor --no-git-tag-version",
@@ -54,7 +54,7 @@
     "bun-types": "^1.1.7",
     "prettier": "^3.0.3",
     "@types/node": "^20.5.9",
-    "typescript": "~5.2.2"
+    "typescript": "~5.5.4"
   },
   "engines": {
     "node": ">=18"

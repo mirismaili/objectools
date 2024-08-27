@@ -11,7 +11,7 @@ test('.filter()', () => {
 
 test('.map()', () => {
   expect(o(obj).map((value) => value * 2)).toEqual({a: 2, b: 4, c: 6})
-  expect(o(obj).map((value, key) => [key.toUpperCase(), value - 1])).toEqual({A: 0, B: 1, C: 2})
+  expect(o(obj).mapKeyValue((value, key) => [key.toUpperCase(), value - 1])).toEqual({A: 0, B: 1, C: 2})
 })
 
 test('.keys, .values, .entries, .length', () => {

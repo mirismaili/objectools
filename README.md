@@ -16,7 +16,7 @@
 - [Usage](#usage)
 - [Examples](#examples)
   - [`.filter()`](#filter)
-  - [`.map()`](#map)
+  - [`.map()`, `.mapKeyValue`](#map)
   - [`.keys`, `.values`, `.entries`, `.length`](#keys-values-entries-length)
   - [`.find()`, `.findIndex()`, `.findKey()`, `.findValue()`](#find-findindex-findkey-findvalue)
   - [`.findLast()`, `.findLastIndex()`, `.findLastKey()`, `.findLastValue()`](#findlast-findlastindex-findlastkey-findlastvalue)
@@ -36,7 +36,7 @@
   modifying [object prototype](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes) (`o(obj).filter(...)`)
 - Useful methods that are operable on **keys**, **values** and **indices** (see [Examples](#examples)):
   - [`filter()`](#filter)
-  - [`map()`](#map), `forEach()`
+  - [`map() & mapKeyValue()`](#map), `forEach()`
   - [`find()`](#find-findindex-findkey-findvalue), [`findIndex()`](#find-findindex-findkey-findvalue), [`findLast()`](#findlast-findlastindex-findlastkey-findlastvalue), [`findLastIndex()`](<(#findlast-findlastindex-findlastkey-findlastvalue)>)
   - [`indexOf()`, `lastIndexOf()`, `indexOfKey()`](<(#indexof-lastindexof-indexofkey)>)
   - [`sort()`](#sort-sortbyvalues),
@@ -96,7 +96,7 @@ o({a: 1, b: 2, c: 3}).filter((_, key, index) => key < 'c' && index > 0) // {b: 2
 
 ```ts
 o({a: 1, b: 2, c: 3}).map((value) => value * 2) // {a: 2, b: 4, c: 6}
-o({a: 1, b: 2, c: 3}).map((value, key) => [key.toUpperCase(), value - 1]) // {A: 0, B: 1, C: 2}
+o({a: 1, b: 2, c: 3}).mapKeyValue((value, key) => [key.toUpperCase(), value - 1]) // {A: 0, B: 1, C: 2}
 ```
 
 ### `.keys`, `.values`, `.entries`, `.length`
